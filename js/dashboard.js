@@ -17,13 +17,21 @@ const taskModal = document.getElementById("taskModal");
 const closeModal = document.getElementById("closeModal");
 const saveTask = document.getElementById("saveTask");
 const toast = document.getElementById("toast");
+const chartCanvas = document.getElementById("taskChart");
+
+let taskChart;
 const filterButtons = document.querySelectorAll(".filter-btn");
 
 let currentFilter = "all";
 const taskTitle = document.getElementById("taskTitle");
 const taskDescription = document.getElementById("taskDescription");
 const taskPriority = document.getElementById("taskPriority");
+const taskCategory = document.getElementById("taskCategory");
 const taskDate = document.getElementById("taskDate");
+const sortTasks = document.getElementById("sortTasks");
+
+
+
 const editingTaskId = document.getElementById("editingTaskId");
 const taskList = document.getElementById("taskList");
 
@@ -114,6 +122,7 @@ saveTask.addEventListener("click", () => {
                 task.title = taskTitle.value;
                 task.description = taskDescription.value;
                 task.priority = taskPriority.value;
+                task.priority = taskPriority.value;
                 task.dueDate = taskDate.value;
 
             }
@@ -127,18 +136,20 @@ saveTask.addEventListener("click", () => {
     }else{
 
         const task = {
+       id: Date.now(),
 
-            id: Date.now(),
+        title: taskTitle.value,
 
-            title: taskTitle.value,
+        description: taskDescription.value,
 
-            description: taskDescription.value,
+        priority: taskPriority.value,
 
-            priority: taskPriority.value,
+        category: taskCategory.value,
 
-            dueDate: taskDate.value,
+        dueDate: taskDate.value,
 
-            completed:false
+        completed:false
+
 
         };
 
@@ -182,6 +193,7 @@ function editTask(id){
     taskTitle.value = task.title;
     taskDescription.value = task.description;
     taskPriority.value = task.priority;
+    taskCategory.value = task.category || "Study";
     taskDate.value = task.dueDate;
 
     editingTaskId.value = task.id;
@@ -227,7 +239,54 @@ function completeTask(id){
     renderTasks();
 
 }
+function getCategoryIcon(category){
 
+    switch(category){
+
+        case "Study":
+            return "📚";
+
+        case "Work":
+            return "💼";
+
+        case "Personal":
+            return "🏠";
+
+        case "Shopping":
+            return "🛒";
+
+        default:
+            return "📌";
+
+    }
+
+}
+function getDueStatus(date){
+
+    if(!date) return "No Due Date";
+
+    const today = new Date();
+
+    const due = new Date(date);
+
+    today.setHours(0,0,0,0);
+    due.setHours(0,0,0,0);
+
+    if(due.getTime() === today.getTime()){
+
+        return "🟢 Due Today";
+
+    }
+
+    if(due < today){
+
+        return "🔴 Overdue";
+
+    }
+
+    return "📅 " + date;
+
+}
 // ===============================
 // Render Tasks
 // ===============================
@@ -235,11 +294,38 @@ function completeTask(id){
 function renderTasks(){
 
     taskList.innerHTML = "";
+    let visibleTasks = 0;
     const keyword = searchTask.value.toLowerCase();
     let completed = 0;
+let sortedTasks = [...tasks];
 
-    tasks
-   tasks
+if(sortTasks.value === "newest"){
+
+    sortedTasks.sort((a,b)=>b.id-a.id);
+
+}
+else if(sortTasks.value === "oldest"){
+
+    sortedTasks.sort((a,b)=>a.id-b.id);
+
+}
+else if(sortTasks.value === "priority"){
+
+    const order = {
+        High:3,
+        Medium:2,
+        Low:1
+    };
+
+    sortedTasks.sort((a,b)=>order[b.priority]-order[a.priority]);
+
+}
+else if(sortTasks.value === "duedate"){
+
+    sortedTasks.sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+
+}
+   sortedTasks
 .filter(task => {
 
     const matchesSearch =
@@ -263,29 +349,44 @@ function renderTasks(){
 })
 .forEach(task => {
 
-        if(task.completed) completed++;
+      
+    visibleTasks++;
 
-        taskList.innerHTML += `
+    if(task.completed) completed++;
+
+    taskList.innerHTML += `
 
         <div class="task-card ${task.completed ? "completed" : ""}">
+           <div class="task-header">
 
-            <div class="task-header">
+    <div>
 
-                <h3>${task.title}</h3>
+        <h3>${task.title}</h3>
 
-                <span class="priority ${task.priority.toLowerCase()}">
-                    ${task.priority}
-                </span>
+        <p class="category">
 
-            </div>
+            ${getCategoryIcon(task.category)}
+            ${task.category}
 
-            <p>${task.description || ""}</p>
+        </p>
+
+    </div>
+
+    <span class="priority ${task.priority.toLowerCase()}">
+        ${task.priority}
+    </span>
+
+</div>
+
+<p>${task.description || ""}</p>
 
             <div class="task-footer">
 
-                <span>📅 ${task.dueDate || "No Due Date"}</span>
+                <span class="due-date">
+                ${getDueStatus(task.dueDate)}
+                   </span>
 
-                <div>
+                <div class="task-actions">
 
                      <button
                        class="edit-btn"
@@ -320,7 +421,21 @@ function renderTasks(){
         `;
 
     });
+if (visibleTasks === 0) {
 
+    taskList.innerHTML = `
+        <div class="empty-state">
+
+            <div class="empty-icon">📋</div>
+
+            <h2>No Tasks Yet</h2>
+
+            <p>Click <strong>+ Add Task</strong> to create your first task.</p>
+
+        </div>
+    `;
+
+}
     totalTasks.textContent = tasks.length;
     completedTasks.textContent = completed;
     pendingTasks.textContent = tasks.length - completed;
@@ -331,8 +446,9 @@ const progress = tasks.length === 0
 
 document.getElementById("progressBar").style.width = progress + "%";
 document.getElementById("progressText").textContent = progress + "%";
-}
 
+updateChart();
+}
 // ===============================
 // Start App
 // ===============================
@@ -390,3 +506,188 @@ themeBtn.addEventListener("click",()=>{
     }
 
 });
+// ==========================
+// Sidebar Navigation
+// ==========================
+
+const dashboardNav = document.getElementById("dashboardNav");
+const myTasksNav = document.getElementById("myTasksNav");
+const completedNav = document.getElementById("completedNav");
+const taskSection = document.getElementById("taskSection");
+
+// Dashboard
+dashboardNav.addEventListener("click", () => {
+
+    currentFilter = "all";
+
+    filterButtons.forEach(btn => btn.classList.remove("active"));
+    document.querySelector('[data-filter="all"]').classList.add("active");
+
+    renderTasks();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+});
+
+// My Tasks
+myTasksNav.addEventListener("click", () => {
+
+    currentFilter = "all";
+
+    filterButtons.forEach(btn => btn.classList.remove("active"));
+    document.querySelector('[data-filter="all"]').classList.add("active");
+
+    renderTasks();
+taskSection.scrollIntoView({
+    behavior: "smooth"
+});
+});
+
+// Completed
+completedNav.addEventListener("click", () => {
+
+    currentFilter = "completed";
+
+    filterButtons.forEach(btn => btn.classList.remove("active"));
+    document.querySelector('[data-filter="completed"]').classList.add("active");
+
+    renderTasks();
+taskSection.scrollIntoView({
+    behavior: "smooth"
+});
+});
+function updateChart(){
+
+    const completed = tasks.filter(task => task.completed).length;
+
+    const pending = tasks.length - completed;
+
+    if(taskChart){
+
+        taskChart.destroy();
+
+    }
+
+    taskChart = new Chart(chartCanvas,{
+
+        type:"doughnut",
+
+        data:{
+
+            labels:["Completed","Pending"],
+
+            datasets:[{
+
+                data:[completed,pending],
+
+                backgroundColor:[
+                    "#22c55e",
+                    "#6366f1"
+                ]
+
+            }]
+
+        },
+
+        options:{
+
+            plugins:{
+
+                legend:{
+
+                    position:"bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+// ==========================
+// Settings Modal
+// ==========================
+
+const settingsNav = document.getElementById("settingsNav");
+const settingsModal = document.getElementById("settingsModal");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+
+const toggleThemeBtn = document.getElementById("toggleThemeBtn");
+const clearTasksBtn = document.getElementById("clearTasksBtn");
+const aboutBtn = document.getElementById("aboutBtn");
+settingsNav.addEventListener("click", (e) => {
+
+    e.stopPropagation();
+
+    settingsModal.style.display = "flex";
+
+});
+
+
+
+
+closeSettingsBtn.addEventListener("click", () => {
+
+    settingsModal.style.display = "none";
+ });
+// Toggle Theme
+toggleThemeBtn.addEventListener("click", () => {
+
+    themeBtn.click();
+
+});
+
+// Clear All Tasks
+clearTasksBtn.addEventListener("click", () => {
+
+    if(confirm("Delete ALL tasks?")){
+
+        tasks = [];
+
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+
+        renderTasks();
+
+        settingsModal.style.display = "none";
+
+        showToast("All tasks deleted!", "#dc2626");
+
+    }
+
+});
+
+// About
+aboutBtn.addEventListener("click", () => {
+
+    alert(
+`TaskFlow
+
+Version 1.0
+
+Developed by:
+Nikhil Sharma
+
+Built using:
+HTML
+CSS
+JavaScript`
+    );
+
+});
+
+
+window.addEventListener("click", (e) => {
+
+    if(e.target === settingsModal){
+
+        settingsModal.style.display = "none";
+
+    }
+
+});
+sortTasks.addEventListener("change", renderTasks);

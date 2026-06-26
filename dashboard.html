@@ -22,12 +22,13 @@
 
         <h2>TaskFlow</h2>
 
-        <ul>
-            <li class="active">Dashboard</li>
-            <li>My Tasks</li>
-            <li>Completed</li>
-            <li>Settings</li>
-        </ul>
+        
+     <ul>
+    <li class="active" id="dashboardNav">Dashboard</li>
+    <li id="myTasksNav">My Tasks</li>
+    <li id="completedNav">Completed</li>
+    <li id="settingsNav">Settings</li>
+</ul>
 
         <button id="logoutBtn">
             Logout
@@ -105,12 +106,30 @@
 
    </div>
 </div>
+<div class="chart-card">
+
+    <h3>Task Overview</h3>
+
+    <canvas id="taskChart"></canvas>
+
+</div>
 <!-- Task Section -->
         <!-- Task Section -->
 
-        <div class="task-section">
+        <div class="task-section"id="taskSection">
 
             <div class="task-header-bar">
+                <select id="sortTasks">
+
+          <option value="newest">Newest First</option>
+
+          <option value="oldest">Oldest First</option>
+
+          <option value="priority">Priority</option>
+
+         <option value="duedate">Due Date</option>
+
+         </select>
 
                 <h2>Your Tasks</h2>
 
@@ -166,7 +185,19 @@
             <option>Medium</option>
             <option>High</option>
         </select>
+<select id="taskCategory">
 
+    <option>Study</option>
+
+    <option>Work</option>
+
+    <option>Personal</option>
+
+    <option>Shopping</option>
+
+    <option>Other</option>
+
+</select>
         <input
             type="date"
             id="taskDate">
@@ -189,8 +220,37 @@
 <div id="toast" class="toast">
     Task Saved Successfully
 </div>
-<script src="js/dashboard.js"></script>
 
+
+
+<!-- Settings Modal -->
+
+<div class="modal" id="settingsModal">
+
+    <div class="modal-content">
+
+        <h2>⚙️ Settings</h2>
+
+        <button id="toggleThemeBtn">
+            🌙 Toggle Dark Mode
+        </button>
+
+        <button id="clearTasksBtn">
+            🗑️ Clear All Tasks
+        </button>
+
+        <button id="aboutBtn">
+            ℹ️ About TaskFlow
+        </button>
+
+        <button id="closeSettingsBtn">
+            Close
+        </button>
+
+         </div>
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 
 </html>

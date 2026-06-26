@@ -756,3 +756,173 @@ body.dark .progress{
 #themeBtn:hover{
     background:#4f46e5;
 }
+#settingsModal .modal-content button{
+
+    width:100%;
+
+    margin-top:12px;
+
+}
+.category{
+
+    margin-top:6px;
+    font-size:14px;
+    font-weight:500;
+    color:#6366f1;
+
+}
+
+body.dark .category{
+
+    color:#a5b4fc;
+
+}
+.due-date{
+    font-weight:600;
+}
+/* Empty State */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:70px 20px;
+
+    background:white;
+
+    border-radius:16px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.empty-icon{
+
+    font-size:70px;
+
+    margin-bottom:15px;
+
+}
+
+.empty-state h2{
+
+    margin-bottom:10px;
+
+    color:#1f2937;
+
+}
+
+.empty-state p{
+
+    color:#6b7280;
+
+}
+
+body.dark .empty-state{
+
+    background:#374151;
+
+}
+
+body.dark .empty-state h2,
+
+body.dark .empty-state p{
+
+    color:white;
+
+}
+.chart-card{
+
+    background: var(--card);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    margin:30px 0;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.chart-card h3{
+
+    margin-bottom:20px;
+
+}
+
+#taskChart{
+
+    max-width:320px;
+
+    margin:auto;
+
+}
+.task-actions{
+
+    display:flex;
+    gap:10px;
+    align-items:center;
+
+}
+
+.edit-btn,
+.complete-btn,
+.delete-btn{
+
+    width:45px;
+    height:45px;
+
+    padding:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border:none;
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.edit-btn{
+
+    background:#6366f1;
+    color:white;
+
+}
+
+.complete-btn{
+
+    background:#22c55e;
+    color:white;
+
+}
+
+.delete-btn{
+
+    background:#ef4444;
+    color:white;
+
+}
+
+.edit-btn:hover,
+.complete-btn:hover,
+.delete-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+.edit-btn:hover,
+.complete-btn:hover,
+.delete-btn:hover{
+
+    transform:translateY(-3px);
+    opacity:.9;
+
+}
