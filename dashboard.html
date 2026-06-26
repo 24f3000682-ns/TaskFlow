@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>TaskFlow</h2>
+
+        <ul>
+            <li class="active">Dashboard</li>
+            <li>My Tasks</li>
+            <li>Completed</li>
+            <li>Settings</li>
+        </ul>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+        <!-- Top Bar -->
+
+        <div class="topbar">
+
+    <h1>Dashboard</h1>
+
+    <div class="topbar-right">
+
+        <input
+            type="text"
+            id="searchTask"
+            placeholder="🔍 Search tasks...">
+
+        <button id="themeBtn">
+            🌙
+        </button>
+
+        <button id="addTaskBtn">
+            + Add Task
+        </button>
+
+    </div>
+
+</div>
+
+        <!-- Statistics -->
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Tasks</h3>
+                <p id="totalTasks">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Completed</h3>
+                <p id="completedTasks">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Pending</h3>
+                <p id="pendingTasks">0</p>
+            </div>
+
+        </div>
+
+
+<!-- Progress Bar -->
+
+<div class="progress-card">
+
+    <div class="progress-header">
+
+        <h3>Task Progress</h3>
+
+        <span id="progressText">0%</span>
+
+    </div>
+
+    <div class="progress">
+
+        <div id="progressBar"></div>
+
+
+   </div>
+</div>
+<!-- Task Section -->
+        <!-- Task Section -->
+
+        <div class="task-section">
+
+            <div class="task-header-bar">
+
+                <h2>Your Tasks</h2>
+
+                <div class="filters">
+
+                    <button class="filter-btn active" data-filter="all">
+                        All
+                    </button>
+
+                    <button class="filter-btn" data-filter="pending">
+                        Pending
+                    </button>
+
+                    <button class="filter-btn" data-filter="completed">
+                        Completed
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div id="taskList"></div>
+
+        </div>
+
+        <!-- Hidden field for Edit -->
+
+        <input type="hidden" id="editingTaskId">
+
+    </main>
+
+</div>
+
+<!-- Add/Edit Task Modal -->
+
+<div class="modal" id="taskModal">
+
+    <div class="modal-content">
+
+        <h2>Create New Task</h2>
+
+        <input
+            type="text"
+            id="taskTitle"
+            placeholder="Task Title">
+
+        <textarea
+            id="taskDescription"
+            placeholder="Task Description"></textarea>
+
+        <select id="taskPriority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+
+        <input
+            type="date"
+            id="taskDate">
+
+        <div class="modal-buttons">
+
+            <button id="saveTask">
+                Save Task
+            </button>
+
+            <button id="closeModal">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<div id="toast" class="toast">
+    Task Saved Successfully
+</div>
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>
