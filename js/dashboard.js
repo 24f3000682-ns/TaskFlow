@@ -458,6 +458,15 @@ searchTask.addEventListener("input", () => {
 
     renderTasks();
 
+    if (searchTask.value.trim() !== "") {
+
+        document.querySelector(".task-section").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
 });
 filterButtons.forEach(button => {
 
